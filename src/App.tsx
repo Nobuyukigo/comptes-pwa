@@ -79,13 +79,12 @@ class App extends React.Component<any, AppState> {
             name: user.displayName
           }
         });
-        console.log('componentDidMount user', user);
-        console.log(this.state);
       } else {
         this.setState({
           authenticated: false,
           loadingUser: false
         });
+        console.error('You are not a registered user');
       }
     });
   }
@@ -129,7 +128,7 @@ class App extends React.Component<any, AppState> {
 
     if (loading) {
       return <div>Loading</div>;
-    } else if (!authenticated) {
+    } else if (!authenticated && FACEBOOK_ID) {
       return (
         <FacebookLogin
           appId={FACEBOOK_ID}
