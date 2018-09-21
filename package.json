@@ -16,12 +16,15 @@
   "dependencies": {
     "@types/dotenv": "^4.0.3",
     "@types/react-facebook-login": "^3.6.5",
+    "@types/react-router-dom": "^4.3.1",
     "axios": "^0.18.0",
     "dotenv": "^6.0.0",
     "firebase": "^5.5.0",
     "react": "^16.5.1",
     "react-dom": "^16.5.1",
-    "react-facebook-login": "^4.1.0"
+    "react-facebook-login": "^4.1.0",
+    "react-router-dom": "^4.3.1",
+    "styled-components": "^3.4.9"
   },
   "scripts": {
     "start": "react-scripts-ts start",

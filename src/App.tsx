@@ -1,9 +1,14 @@
 import * as firebase from 'firebase';
 import * as React from 'react';
 import FacebookLogin from 'react-facebook-login';
+import { BrowserRouter as Router } from 'react-router-dom';
+import styles from 'styled-components';
+
 import { loginWithFacebook } from './utils/login-with-facebook';
 
 import './App.css';
+
+import { Routes } from './routes';
 
 import { Group, User } from './utils/models';
 
@@ -16,6 +21,11 @@ import {
   FIREBASE_DOMAIN,
   FIREBASE_KEY
 } from './config';
+
+const ContentWrapper = styles.div`
+	height: 100%
+	width: 100%
+`;
 
 interface AppState {
   authenticated: boolean;
@@ -31,7 +41,8 @@ class App extends React.Component<any, AppState> {
     this.state = {
       authenticated: false,
       loadingFriends: true,
-      loadingUser: true
+      loadingUser: true,
+      user: undefined
     };
 
     const firebaseConfig = {
@@ -42,11 +53,6 @@ class App extends React.Component<any, AppState> {
     };
 
     firebase.initializeApp(firebaseConfig);
-
-    // const groupsRef = firebase
-    //   .database()
-    //   .ref()
-    //   .child('groups');
 
     // user &&
     //   groupsRef.once('value', (snapshot) => {
@@ -67,7 +73,7 @@ class App extends React.Component<any, AppState> {
     //   });
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user && user.uid && user.displayName) {
         this.setState({
@@ -79,12 +85,17 @@ class App extends React.Component<any, AppState> {
             name: user.displayName
           }
         });
+
+        this.getGroupData(user.uid);
+        this.state.user &&
+          this.state.user.group &&
+          this.getFriendData(user.uid, this.state.user.group);
       } else {
         this.setState({
           authenticated: false,
           loadingUser: false
         });
-        console.error('You are not a registered user');
+        console.error('User not identified');
       }
     });
   }
@@ -93,7 +104,35 @@ class App extends React.Component<any, AppState> {
     loginWithFacebook(fbData.accessToken);
   }
 
-  getFriendData = (userId: string, group: Group) => {
+  getGroupData(userId: string) {
+    const groupsRef = firebase
+      .database()
+      .ref()
+      .child('groups');
+
+    groupsRef
+      .once('value')
+      .then((snapshot) => {
+        const groups: Group[] = snapshot
+          .val()
+          .filter((item: Group) => item[userId]);
+
+        const group = groups[0];
+        this.getFriendData(userId, group);
+        this.setState({
+          user: {
+            ...this.state.user,
+            group
+          }
+        });
+      })
+      .catch((err) => {
+        this.setState({ loadingFriends: false });
+        console.error(err);
+      });
+  }
+
+  getFriendData(userId: string, group: Group) {
     const groupMemberIds = Object.keys(group);
     const friends = groupMemberIds.filter((id) => id !== userId);
 
@@ -103,24 +142,23 @@ class App extends React.Component<any, AppState> {
         .ref(`users/${id}`)
         .once('value')
         .then((snapshot) => {
-          // this.setState({
-          //   ...this.state,
-          //   loadingFriends: false,
-          //   user: {
-          //     ...this.state.user,
-          //     friend: {
-          //       id,
-          //       ...snapshot.val()
-          //     }
-          //   }
-          // });
+          this.setState({
+            loadingFriends: false,
+            user: {
+              ...this.state.user,
+              friend: {
+                id,
+                ...snapshot.val()
+              }
+            }
+          });
         })
         .catch((err) => {
           this.setState({ loadingFriends: false });
           console.error(err);
         });
     });
-  };
+  }
 
   render() {
     const { authenticated, loadingUser } = this.state;
@@ -139,9 +177,11 @@ class App extends React.Component<any, AppState> {
       );
     } else {
       return (
-        <div>
-          Bonjour {this.state.user && this.state.user.name} tu es connecté
-        </div>
+        <ContentWrapper>
+          <Router>
+            <Routes />
+          </Router>
+        </ContentWrapper>
       );
     }
   }

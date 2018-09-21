@@ -62,8 +62,8 @@ export interface ScreenProps {
 export type TypeOfExpense = 'personnelle' | 'partagée' | 'avance';
 
 export interface User {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
   avatar?: string;
   group?: Group;
   friend?: Friend;
