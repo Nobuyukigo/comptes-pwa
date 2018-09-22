@@ -8,6 +8,7 @@ ul {
 
 body {
   display: flex;
+  background: #f1f5fa;
 }
 
 #root {
