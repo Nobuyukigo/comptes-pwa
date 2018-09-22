@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:500');
+
 html,
 body,
 ul {
@@ -9,6 +11,16 @@ ul {
 body {
   display: flex;
   background: #f1f5fa;
+  font-family: 'Open Sans', sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 500;
 }
 
 #root {
