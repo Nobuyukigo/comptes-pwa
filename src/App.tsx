@@ -1,18 +1,15 @@
 import * as firebase from 'firebase';
 import * as React from 'react';
 import FacebookLogin from 'react-facebook-login';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import styles from 'styled-components';
 
 import { loginWithFacebook } from './utils/login-with-facebook';
 
-import './App.css';
+import Home from './screens/Home';
+import Statistics from './screens/Statistics';
 
-import { Routes } from './routes';
-
-import { Group, User } from './utils/models';
-
-// import logo from './logo.svg';
+import { Expense, Group, User } from './utils/models';
 
 import {
   FACEBOOK_ID,
@@ -31,6 +28,10 @@ interface AppState {
   authenticated: boolean;
   loadingFriends: boolean;
   loadingUser: boolean;
+  loadingExpensesPaid: boolean;
+  loadingExpensesShared: boolean;
+  expensesPaid: Expense[];
+  expensesShared: Expense[];
   user?: User;
 }
 
@@ -42,6 +43,10 @@ class App extends React.Component<any, AppState> {
       authenticated: false,
       loadingFriends: true,
       loadingUser: true,
+      loadingExpensesPaid: true,
+      loadingExpensesShared: true,
+      expensesPaid: [],
+      expensesShared: [],
       user: undefined
     };
 
@@ -53,43 +58,28 @@ class App extends React.Component<any, AppState> {
     };
 
     firebase.initializeApp(firebaseConfig);
-
-    // user &&
-    //   groupsRef.once('value', (snapshot) => {
-    //     const groups: Group[] = snapshot
-    //       .val()
-    //       .filter((item: Group) => item[user.id]);
-    //     const group = groups[0];
-
-    //     this.state = {
-    //       ...this.state,
-    //       user: {
-    //         ...user,
-    //         group
-    //       }
-    //     };
-
-    //     groups.length > 0 && this.getFriendData(user.id, group);
-    //   });
   }
 
   async componentDidMount() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user && user.uid && user.displayName) {
+    firebase.auth().onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser && firebaseUser.uid && firebaseUser.displayName) {
         this.setState({
           authenticated: true,
           loadingUser: false,
           user: {
-            avatar: user.photoURL || undefined,
-            id: user.uid,
-            name: user.displayName
+            avatar: firebaseUser.photoURL || undefined,
+            id: firebaseUser.uid,
+            name: firebaseUser.displayName
           }
         });
 
-        this.getGroupData(user.uid);
+        this.getGroupData(firebaseUser.uid);
+        this.loadUserExpenses(firebaseUser.uid);
+
         this.state.user &&
           this.state.user.group &&
-          this.getFriendData(user.uid, this.state.user.group);
+          this.state.user.id &&
+          this.getFriendData(this.state.user.id, this.state.user.group);
       } else {
         this.setState({
           authenticated: false,
@@ -102,6 +92,42 @@ class App extends React.Component<any, AppState> {
 
   fbAuthCallback(fbData: any) {
     loginWithFacebook(fbData.accessToken);
+  }
+
+  loadUserExpenses(id: string) {
+    console.log('start loading expenses');
+    const expensesRef = firebase
+      .database()
+      .ref()
+      .child('expenses');
+
+    const expensesPaidRef = expensesRef.orderByChild('whoPaid').equalTo(id);
+    const expensesSharedRef = expensesRef
+      .orderByChild('sharedWith')
+      .equalTo(id);
+
+    expensesPaidRef.on('value', (snapshot) => {
+      const expenses = this.extractExpenses(snapshot);
+      this.setState({
+        expensesPaid: expenses,
+        loadingExpensesPaid: false
+      });
+    });
+
+    expensesSharedRef.on('value', (snapshot) => {
+      const expenses = this.extractExpenses(snapshot);
+      this.setState({
+        expensesShared: expenses,
+        loadingExpensesShared: false
+      });
+    });
+  }
+
+  extractExpenses(snapshot: any) {
+    return Object.keys(snapshot.val()).map((id) => ({
+      ...snapshot.val()[id],
+      id
+    }));
   }
 
   getGroupData(userId: string) {
@@ -161,7 +187,13 @@ class App extends React.Component<any, AppState> {
   }
 
   render() {
-    const { authenticated, loadingUser } = this.state;
+    const {
+      authenticated,
+      loadingUser,
+      user,
+      expensesPaid,
+      expensesShared
+    } = this.state;
     const loading = loadingUser;
 
     if (loading) {
@@ -177,11 +209,32 @@ class App extends React.Component<any, AppState> {
       );
     } else {
       return (
-        <ContentWrapper>
-          <Router>
-            <Routes />
-          </Router>
-        </ContentWrapper>
+        user && (
+          <ContentWrapper>
+            <Router>
+              <div style={{ width: '100%', height: '100%' }}>
+                <Route
+                  exact={true}
+                  path="/"
+                  // tslint:disable-next-line jsx-no-lambda
+                  render={(props) => (
+                    <Home
+                      {...props}
+                      user={user}
+                      expenses={[...expensesPaid, ...expensesShared]}
+                    />
+                  )}
+                />
+                <Route
+                  exact={true}
+                  path="/stats"
+                  // tslint:disable-next-line jsx-no-lambda
+                  render={(props) => <Statistics {...props} user={user} />}
+                />
+              </div>
+            </Router>
+          </ContentWrapper>
+        )
       );
     }
   }

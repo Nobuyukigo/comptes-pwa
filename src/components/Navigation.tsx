@@ -5,19 +5,44 @@ import styles from 'styled-components';
 import ActionButton from './ActionButton';
 import NavItem from './NavItem';
 
-const Navigation: React.SFC<{}> = () => {
-  return (
-    <Nav>
-      <NavList>
-        <NavItem href="/" label="Accueil" icon="home" />
-        <Link to="/new-expense">
-          <ActionButton />
-        </Link>
-        <NavItem href="/stats" label="Statistiques" icon="chart" />
-      </NavList>
-    </Nav>
-  );
-};
+interface NavState {
+  active: 'home' | 'stats';
+}
+
+class Navigation extends React.Component<any, NavState> {
+  constructor({}) {
+    super({});
+
+    this.state = {
+      active: 'home'
+    };
+  }
+
+  render() {
+    const { active } = this.state;
+    return (
+      <Nav>
+        <NavList>
+          <NavItem
+            href="/"
+            label="Accueil"
+            icon="home"
+            active={active === 'home'}
+          />
+          <Link to="/new-expense">
+            <ActionButton />
+          </Link>
+          <NavItem
+            href="/stats"
+            label="Statistiques"
+            icon="chart"
+            active={active === 'stats'}
+          />
+        </NavList>
+      </Nav>
+    );
+  }
+}
 
 const radius = 50;
 const Nav = styles.nav`

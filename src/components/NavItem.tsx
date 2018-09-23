@@ -10,6 +10,7 @@ interface ItemProps {
   href: string;
   label: string;
   icon: NavIcon;
+  active: boolean;
 }
 
 const icons = {
@@ -68,7 +69,7 @@ const Icon = styles.svg`
 const Text = styles.h3`
 	font-size: 12px;
 	color: ${colors.darkBlue};
-	margin: 0;
+	margin: 4px 0 0 0;
 `;
 
 export default NavItem;

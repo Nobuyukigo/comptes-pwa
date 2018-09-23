@@ -26,5 +26,7 @@ export const ScreenWrapper = styles.div`
 
 export const MainContent = styles.main`
 	display: flex;
+	flex-direction: column;
+	overflow: scroll;
 	height: 100%;
 `;
