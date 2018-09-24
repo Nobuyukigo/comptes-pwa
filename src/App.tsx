@@ -95,7 +95,6 @@ class App extends React.Component<any, AppState> {
   }
 
   loadUserExpenses(id: string) {
-    console.log('start loading expenses');
     const expensesRef = firebase
       .database()
       .ref()

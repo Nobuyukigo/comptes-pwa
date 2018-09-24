@@ -51,6 +51,7 @@ const Nav = styles.nav`
 	background: white;
 	border-top-left-radius: ${radius}px;
 	border-top-right-radius: ${radius}px;
+	box-shadow: 0px -6px 24px rgba(0,0,0,0.12);
 `;
 
 const NavList = styles.ul`

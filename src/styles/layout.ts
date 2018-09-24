@@ -4,6 +4,7 @@ export const colors = {
   blueGradientStart: '#2558FF',
   blueGradientEnd: '#09DAD9',
   darkBlue: '#809BC2',
+  blueGray: '#9BAEB2',
   blueMidrange: '#0FC0E0',
   white: '#fff',
   backgroundGrey: '#F1F5FA',
@@ -27,6 +28,6 @@ export const ScreenWrapper = styles.div`
 export const MainContent = styles.main`
 	display: flex;
 	flex-direction: column;
-	overflow: scroll;
+	overflow-y: scroll;
 	height: 100%;
 `;
