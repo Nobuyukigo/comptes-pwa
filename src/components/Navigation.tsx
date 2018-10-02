@@ -46,7 +46,11 @@ class Navigation extends React.Component<any, NavState> {
 
 const radius = 50;
 const Nav = styles.nav`
+	position: fixed;
 	display: flex;
+	bottom: 0px;
+	left: 0;
+	right: 0;
 	height: 10vh;
 	background: white;
 	border-top-left-radius: ${radius}px;
@@ -58,7 +62,6 @@ const NavList = styles.ul`
 	position: relative;
 	display: flex;
 	width: 100%;
-
 `;
 
 export default Navigation;

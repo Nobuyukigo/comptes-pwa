@@ -51,7 +51,7 @@ const Name = styles.h1`
 	margin-top: 5vw;
 `;
 
-const iconSize = 30;
+const iconSize = 28;
 const SVG = styles.svg`
 	height: ${iconSize}px;
 	width: ${iconSize}px;
