@@ -46,8 +46,8 @@ export interface Group {
 
 export interface MonthTotal {
   month: string;
-  partagées: number;
-  personnelles: number;
+  shared: number;
+  personal: number;
 }
 
 export interface ScreenProps {

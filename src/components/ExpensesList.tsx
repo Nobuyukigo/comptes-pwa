@@ -23,8 +23,9 @@ class ExpensesList extends React.Component<ListProps, {}> {
 
 const ListWrapper = styles.div`
 	display: flex;
-	flex: 3;
+	flex: 6;
 	flex-direction: column;
+	margin-top: 50px;
 `;
 
 export default ExpensesList;

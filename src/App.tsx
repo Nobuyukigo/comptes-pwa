@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import styles from 'styled-components';
 
 import { loginWithFacebook } from './utils/login-with-facebook';
+import sortExpensesByMonth from './utils/sort-expenses-by-month/sort-expenses-by-month';
 
 import Home from './screens/Home';
 import Statistics from './screens/Statistics';
@@ -93,6 +94,14 @@ class App extends React.Component<any, AppState> {
   fbAuthCallback(fbData: any) {
     loginWithFacebook(fbData.accessToken);
   }
+
+  disconnect = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => this.setState({ user: {} }))
+      .catch((err) => console.error(err));
+  };
 
   loadUserExpenses(id: string) {
     const expensesRef = firebase
@@ -207,6 +216,9 @@ class App extends React.Component<any, AppState> {
         />
       );
     } else {
+      const expenses = [...expensesPaid, ...expensesShared];
+      const expensesSortedByMonth = sortExpensesByMonth(expenses);
+      console.log(expensesSortedByMonth);
       return (
         user && (
           <ContentWrapper>
@@ -217,18 +229,20 @@ class App extends React.Component<any, AppState> {
                   path="/"
                   // tslint:disable-next-line jsx-no-lambda
                   render={(props) => (
-                    <Home
-                      {...props}
-                      user={user}
-                      expenses={[...expensesPaid, ...expensesShared]}
-                    />
+                    <Home {...props} user={user} expenses={expenses} />
                   )}
                 />
                 <Route
                   exact={true}
                   path="/stats"
                   // tslint:disable-next-line jsx-no-lambda
-                  render={(props) => <Statistics {...props} user={user} />}
+                  render={(props) => (
+                    <Statistics
+                      {...props}
+                      user={user}
+                      disconnect={this.disconnect}
+                    />
+                  )}
                 />
               </div>
             </Router>

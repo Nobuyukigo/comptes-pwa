@@ -9,6 +9,7 @@ export async function saveUserInFirebase(user: firebase.User) {
         avatar: user.photoURL,
         name: user.displayName
       });
+    console.log(user);
   } catch (error) {
     console.error(error);
   }

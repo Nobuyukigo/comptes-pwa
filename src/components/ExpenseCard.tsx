@@ -27,7 +27,7 @@ const Wrapper = styles.div`
 	justify-content: space-between;
 	align-items: center;	
 	background: ${colors.white};
-	margin: 10px 5vw;
+	margin: 8px 5vw;
 	border-radius: 6px;
 	box-shadow: 0px 6px 24px rgba(0,0,0,0.10);
 	padding: 3.6rem 2rem;

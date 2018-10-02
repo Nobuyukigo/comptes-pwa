@@ -7,6 +7,7 @@ import { User } from '../utils/models';
 
 interface StatisticsProps {
   user: User;
+  disconnect(): void;
 }
 
 class Statistics extends React.Component<StatisticsProps, {}> {
@@ -15,6 +16,7 @@ class Statistics extends React.Component<StatisticsProps, {}> {
       <ScreenWrapper>
         <MainContent>
           <span>Statistics page bois</span>
+          <button onClick={this.props.disconnect}>Disconnect</button>
         </MainContent>
         <Navigation />
       </ScreenWrapper>
