@@ -25,7 +25,7 @@ const ListWrapper = styles.div`
 	display: flex;
 	flex: 6;
 	flex-direction: column;
-	margin-top: 50px;
+	margin: 50px 0px;
 `;
 
 export default ExpensesList;

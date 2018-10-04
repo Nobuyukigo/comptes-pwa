@@ -51,7 +51,7 @@ const Nav = styles.nav`
 	bottom: 0px;
 	left: 0;
 	right: 0;
-	height: 10vh;
+	height: 64px;
 	background: white;
 	border-top-left-radius: ${radius}px;
 	border-top-right-radius: ${radius}px;

@@ -30,7 +30,8 @@ const Wrapper = styles.div`
 	margin: 8px 5vw;
 	border-radius: 6px;
 	box-shadow: 0px 6px 24px rgba(0,0,0,0.10);
-	padding: 3.6rem 2rem;
+	padding: 2rem;
+	flex-shrink: 0;
 `;
 
 const LeftSection = styles.div`

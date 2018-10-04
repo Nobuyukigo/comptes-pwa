@@ -8,16 +8,23 @@ import { MainContent, ScreenWrapper } from '../styles/layout';
 import { Expense, User } from '../utils/models';
 
 interface HomeProps {
-  user: User;
   expenses: Expense[];
+  user: User;
+  selectedMonth: string;
+  handleMonthSelection(value: -1 | 1): void;
 }
 
 class Home extends React.Component<HomeProps, {}> {
   render() {
+    const { handleMonthSelection, selectedMonth, user } = this.props;
     return (
       <ScreenWrapper>
         <MainContent>
-          <Header user={this.props.user} />
+          <Header
+            user={user}
+            handleMonthSelection={handleMonthSelection}
+            selectedMonth={selectedMonth}
+          />
           <ExpensesList expenses={this.props.expenses} />
         </MainContent>
         <Navigation />

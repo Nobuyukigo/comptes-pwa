@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import styles from 'styled-components';
 
 import { loginWithFacebook } from './utils/login-with-facebook';
-import sortExpensesByMonth from './utils/sort-expenses-by-month/sort-expenses-by-month';
+// import sortExpensesByMonth from './utils/sort-expenses-by-month/sort-expenses-by-month';
 
 import Home from './screens/Home';
 import Statistics from './screens/Statistics';
@@ -19,6 +19,8 @@ import {
   FIREBASE_DOMAIN,
   FIREBASE_KEY
 } from './config';
+import moveBetweenMonths from './utils/move-between-months/move-between-months';
+import sortExpensesByMonth from './utils/sort-expenses-by-month/sort-expenses-by-month';
 
 const ContentWrapper = styles.div`
 	height: 100%
@@ -34,6 +36,7 @@ interface AppState {
   expensesPaid: Expense[];
   expensesShared: Expense[];
   user?: User;
+  selectedMonth: string;
 }
 
 class App extends React.Component<any, AppState> {
@@ -48,7 +51,8 @@ class App extends React.Component<any, AppState> {
       loadingExpensesShared: true,
       expensesPaid: [],
       expensesShared: [],
-      user: undefined
+      user: undefined,
+      selectedMonth: new Date().toJSON().slice(0, 7)
     };
 
     const firebaseConfig = {
@@ -129,6 +133,9 @@ class App extends React.Component<any, AppState> {
         loadingExpensesShared: false
       });
     });
+
+    // expensesSharedRef.off();
+    // expensesPaidRef.off();
   }
 
   extractExpenses(snapshot: any) {
@@ -194,13 +201,20 @@ class App extends React.Component<any, AppState> {
     });
   }
 
+  handleMonthSelection = (value: -1 | 1) => {
+    this.setState((prevState) => ({
+      selectedMonth: moveBetweenMonths(prevState.selectedMonth, value)
+    }));
+  };
+
   render() {
     const {
       authenticated,
       loadingUser,
       user,
       expensesPaid,
-      expensesShared
+      expensesShared,
+      selectedMonth
     } = this.state;
     const loading = loadingUser;
 
@@ -218,7 +232,9 @@ class App extends React.Component<any, AppState> {
     } else {
       const expenses = [...expensesPaid, ...expensesShared];
       const expensesSortedByMonth = sortExpensesByMonth(expenses);
-      console.log(expensesSortedByMonth);
+      const expensesOfTheMonth = expensesSortedByMonth[selectedMonth] || [];
+      console.log(expenses);
+
       return (
         user && (
           <ContentWrapper>
@@ -229,7 +245,13 @@ class App extends React.Component<any, AppState> {
                   path="/"
                   // tslint:disable-next-line jsx-no-lambda
                   render={(props) => (
-                    <Home {...props} user={user} expenses={expenses} />
+                    <Home
+                      {...props}
+                      expenses={expensesOfTheMonth}
+                      handleMonthSelection={this.handleMonthSelection}
+                      user={user}
+                      selectedMonth={selectedMonth}
+                    />
                   )}
                 />
                 <Route
