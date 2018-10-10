@@ -10,34 +10,54 @@ interface ExpenseProps {
 
 const ExpenseCard: React.SFC<ExpenseProps> = ({ expense }) => {
   return (
-    <Wrapper>
-      <LeftSection>
-        <Details>{expense.details}</Details>
-        <Type>{expense.type}</Type>
-      </LeftSection>
-      <RightSection>
-        <Cost>{expense.cost} €</Cost>
-      </RightSection>
-    </Wrapper>
+    <ListElementWrapper>
+      <Button>
+        <LeftSection>
+          <Details>{expense.details}</Details>
+          <Type>{expense.type}</Type>
+        </LeftSection>
+        <RightSection>
+          <Cost>{expense.cost} €</Cost>
+        </RightSection>
+      </Button>
+    </ListElementWrapper>
   );
 };
 
-const Wrapper = styles.div`
+const ListElementWrapper = styles.li`
+	background: red;
 	display: flex;
-	justify-content: space-between;
-	align-items: center;	
-	background: ${colors.white};
-	margin: 8px 5vw;
-	border-radius: 6px;
-	box-shadow: 0px 6px 24px rgba(0,0,0,0.10);
-	padding: 2rem;
-	flex-shrink: 0;
+`;
+
+const paddingTopBottom = 2.4;
+
+const Button = styles.button`
+		position: relative;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		background: ${colors.white};
+		border: none;
+		padding: 1.8rem 2.8rem;
+
+	&:after {
+		content: "";
+		position: absolute;
+		height: 1px;
+		width: calc(100% - ${paddingTopBottom * 2}rem);
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		background: #EBF2FB;
+	}
 `;
 
 const LeftSection = styles.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	align-items: flex-start;
 `;
 
 const RightSection = styles.div`
@@ -45,13 +65,13 @@ const RightSection = styles.div`
 `;
 
 const Details = styles.h2`
-	font-size: 1.6rem;
+	font-size: 1.4rem;
 	color: ${colors.darkBlue}
 	font-weight: 600;
 `;
 
 const Type = styles.h4`
-	font-size: 1.3rem;
+	font-size: 1.2rem;
 	font-weight: 500;
 	color: ${colors.blueGray};
 	text-transform: capitalize;
@@ -59,7 +79,7 @@ const Type = styles.h4`
 `;
 
 const Cost = styles.h4`
-	font-size: 2rem;
+	font-size: 1.8rem;
 	font-weight: 600;
 	color: ${colors.blueGradientEnd}
 `;
