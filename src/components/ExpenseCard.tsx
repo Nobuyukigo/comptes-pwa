@@ -27,6 +27,7 @@ const ExpenseCard: React.SFC<ExpenseProps> = ({ expense }) => {
 const ListElementWrapper = styles.li`
 	background: red;
 	display: flex;
+	flex-shrink: 0;
 `;
 
 const paddingTopBottom = 2.4;
@@ -65,7 +66,7 @@ const RightSection = styles.div`
 `;
 
 const Details = styles.h2`
-	font-size: 1.4rem;
+	font-size: 1.5rem;
 	color: ${colors.darkBlue}
 	font-weight: 600;
 `;
