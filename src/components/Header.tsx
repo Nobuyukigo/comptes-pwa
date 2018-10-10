@@ -30,7 +30,9 @@ class Header extends React.Component<HeaderProps, {}> {
             handleClick={() => handleMonthSelection(-1)}
             render={<polyline points="15 18 9 12 15 6" />}
           />
-          <span>{readableMonthAndYear(this.props.selectedMonth)}</span>
+          <MonthAndYear>
+            {readableMonthAndYear(this.props.selectedMonth)}
+          </MonthAndYear>
           <SelectorIcon
             handleClick={() => handleMonthSelection(1)}
             render={<polyline points="9 18 15 12 9 6" />}
@@ -85,6 +87,12 @@ const MonthSelector = styles.div`
 	left: 50%;
 	transform: translate(-50%, 50%);
 	box-shadow: 0px 2px 10px rgba(0,0,0,0.10);
+`;
+
+const MonthAndYear = styles.span`
+	font-size: 1.4rem;
+	font-weight: 600;
+	color: ${colors.darkBlue};
 `;
 
 export default Header;

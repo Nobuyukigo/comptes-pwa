@@ -25,7 +25,6 @@ const ExpenseCard: React.SFC<ExpenseProps> = ({ expense }) => {
 };
 
 const ListElementWrapper = styles.li`
-	background: red;
 	display: flex;
 	flex-shrink: 0;
 `;
@@ -33,16 +32,19 @@ const ListElementWrapper = styles.li`
 const paddingTopBottom = 2.4;
 
 const Button = styles.button`
-		position: relative;
-		display: flex;
-		flex-shrink: 0;
-		justify-content: space-between;
-		align-items: center;
-		width: 100%;
-		background: ${colors.white};
-		border: none;
-		padding: 1.8rem 2.8rem;
-		-webkit-tap-highlight-color: #EBF2FB;
+	position: relative;
+	display: flex;
+	flex-shrink: 0;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	background: ${colors.white};
+	border: none;
+	padding: 1.8rem 2.8rem;
+
+	&:active {
+		background: #EBF2FB;
+	}
 
 	&:after {
 		content: "";
