@@ -35,12 +35,14 @@ const paddingTopBottom = 2.4;
 const Button = styles.button`
 		position: relative;
 		display: flex;
+		flex-shrink: 0;
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
 		background: ${colors.white};
 		border: none;
 		padding: 1.8rem 2.8rem;
+		-webkit-tap-highlight-color: #EBF2FB;
 
 	&:after {
 		content: "";
