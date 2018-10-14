@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import styles from 'styled-components';
 
 import { loginWithFacebook } from './utils/login-with-facebook';
-// import sortExpensesByMonth from './utils/sort-expenses-by-month/sort-expenses-by-month';
 
 import Home from './screens/Home';
 import Statistics from './screens/Statistics';
@@ -233,7 +232,6 @@ class App extends React.Component<any, AppState> {
       const expenses = [...expensesPaid, ...expensesShared];
       const expensesSortedByMonth = sortExpensesByMonth(expenses);
       const expensesOfTheMonth = expensesSortedByMonth[selectedMonth] || [];
-      console.log(expenses);
 
       return (
         user && (

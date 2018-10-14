@@ -3,6 +3,7 @@ import * as React from 'react';
 import ExpensesList from '../components/ExpensesList';
 import Header from '../components/Header';
 import Navigation from '../components/Navigation';
+import TotalSection from '../components/TotalSection';
 import { MainContent, ScreenWrapper } from '../styles/layout';
 
 import { Expense, User } from '../utils/models';
@@ -16,7 +17,7 @@ interface HomeProps {
 
 class Home extends React.Component<HomeProps, {}> {
   render() {
-    const { handleMonthSelection, selectedMonth, user } = this.props;
+    const { handleMonthSelection, selectedMonth, user, expenses } = this.props;
     return (
       <ScreenWrapper>
         <MainContent>
@@ -25,7 +26,8 @@ class Home extends React.Component<HomeProps, {}> {
             handleMonthSelection={handleMonthSelection}
             selectedMonth={selectedMonth}
           />
-          <ExpensesList expenses={this.props.expenses} />
+          <TotalSection user={user} expenses={expenses} />
+          <ExpensesList expenses={expenses} />
         </MainContent>
         <Navigation />
       </ScreenWrapper>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from 'styled-components';
 
-import { colors } from '../styles/layout';
+import { colors, RADIUS } from '../styles/layout';
 import { Expense } from '../utils/models';
 
 import ExpenseCard from './ExpenseCard';
@@ -22,15 +22,14 @@ class ExpensesList extends React.Component<ListProps, {}> {
   }
 }
 
-const radius = 6;
 const ListWrapper = styles.ul`
 	display: flex;
 	flex: 6;
 	flex-direction: column;
-	margin: 50px 1.8rem;
+	margin: 0 1.8rem;
 	padding-top: 4px;
-	border-top-right-radius: ${radius}px;
-	border-top-left-radius: ${radius}px;
+	border-top-right-radius: ${RADIUS}px;
+	border-top-left-radius: ${RADIUS}px;
 	background: ${colors.white};
 	list-style: none;
 `;

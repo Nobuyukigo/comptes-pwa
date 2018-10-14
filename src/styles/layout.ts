@@ -31,3 +31,5 @@ export const MainContent = styles.main`
 	overflow-y: scroll;
 	height: 100%;
 `;
+
+export const RADIUS = 6;

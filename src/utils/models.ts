@@ -65,6 +65,11 @@ export interface User {
   id?: string;
   name?: string;
   avatar?: string;
-  group?: Group;
   friend?: Friend;
+  group?: Group;
+}
+
+export interface UserWithFriend extends User {
+  friend: Friend;
+  group: Group;
 }
